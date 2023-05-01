@@ -1,0 +1,346 @@
+{
+  "SOURCE": "devRunner.js",
+  "content": {
+    "typeResults": [
+      {
+        "type": "EC2_INSTANCE",
+        "results": {
+          "entityId": "EC2_INSTANCE-1F0D043EE81602F5",
+          "type": "EC2_INSTANCE",
+          "displayName": "UNKNOWN EC2_INSTANCE-1F0D043EE81602F5",
+          "firstSeenTms": 1679958719819,
+          "lastSeenTms": 1682618838267,
+          "properties": {
+            "localHostName": "ip-10-4-6-233.corp.polarity.io",
+            "amiId": "ami-05fa00d4c63e32376",
+            "awsInstanceId": "i-024a67e8f7c896f12",
+            "awsInstanceType": "t3.medium",
+            "localIp": "10.4.6.233",
+            "awsSecurityGroup": [
+              "secgrp-ue1-q-sshmgmt",
+              "zabbix-monitoring-security-group",
+              "secgrp-ue1-q-https"
+            ]
+          },
+          "tags": [],
+          "managementZones": [],
+          "icon": {
+            "primaryIconType": "ec2"
+          },
+          "fromRelationships": {},
+          "toRelationships": {
+            "runsOn": [
+              {
+                "id": "HOST-ECC30D999294864B",
+                "type": "HOST"
+              }
+            ],
+            "isSiteOf": [
+              {
+                "id": "AWS_AVAILABILITY_ZONE-41B70BF3061AE9F8",
+                "type": "AWS_AVAILABILITY_ZONE"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "HOST",
+        "results": {
+          "entityId": "HOST-ECC30D999294864B",
+          "type": "HOST",
+          "displayName": "integrations-api.corp.polarity.io",
+          "firstSeenTms": 1679958719819,
+          "lastSeenTms": 1682618838267,
+          "properties": {
+            "bitness": "64",
+            "installerTrackedDownload": false,
+            "autoInjection": "ENABLED",
+            "additionalSystemInfo": [
+              {
+                "value": "0",
+                "key": "system.processor.frequency.max"
+              },
+              {
+                "value": "Amazon EC2",
+                "key": "system.vendor"
+              },
+              {
+                "value": "Amazon EC2",
+                "key": "system.board.vendor"
+              },
+              {
+                "value": "0",
+                "key": "system.processor.frequency.min"
+              },
+              {
+                "value": "4051427328",
+                "key": "system.memory.size"
+              },
+              {
+                "value": "Intel(R) Xeon(R) Platinum 8175M CPU @ 2.50GHz",
+                "key": "system.processor.model"
+              },
+              {
+                "value": "t3.medium",
+                "key": "system.model"
+              },
+              {
+                "value": "x86",
+                "key": "system.architecture"
+              }
+            ],
+            "monitoringMode": "FULL_STACK",
+            "osArchitecture": "X86",
+            "osVersion": "Amazon Linux 2 (kernel 5.10.130-118.517.amzn2.x86_64)",
+            "installerPotentialProblem": false,
+            "cloudType": "EC2",
+            "macAddresses": ["12:0D:DB:AA:1C:01"],
+            "osType": "LINUX",
+            "state": "RUNNING",
+            "physicalMemory": 4051427328,
+            "detectedName": "integrations-api.corp.polarity.io",
+            "installerVersion": "1.263.138.20230405-022541",
+            "standalone": false,
+            "ipAddress": ["10.4.6.233"],
+            "hypervisorType": "AWS_NITRO",
+            "networkZone": "default",
+            "standaloneSpecialAgentsOnly": false,
+            "logicalCpuCores": 2,
+            "isMonitoringCandidate": false,
+            "cpuCores": 1,
+            "memoryTotal": 4051427328,
+            "installerSupportAlert": false
+          },
+          "tags": [],
+          "managementZones": [],
+          "icon": {
+            "primaryIconType": "linux",
+            "secondaryIconType": "ec2"
+          },
+          "fromRelationships": {
+            "isNetworkClientOfHost": [
+              {
+                "id": "HOST-ECC30D999294864B",
+                "type": "HOST"
+              }
+            ],
+            "runsOn": [
+              {
+                "id": "EC2_INSTANCE-1F0D043EE81602F5",
+                "type": "EC2_INSTANCE"
+              }
+            ]
+          },
+          "toRelationships": {
+            "isNetworkClientOfHost": [
+              {
+                "id": "HOST-ECC30D999294864B",
+                "type": "HOST"
+              }
+            ],
+            "isProcessOf": [
+              {
+                "id": "PROCESS_GROUP_INSTANCE-6C6B62248DA76CFC",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-FD0A17923FE20244",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-EBFDA73A38A3DAB2",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-C51337D115193D44",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-548C31C20D7A471C",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-2BF8370BE5DBF278",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-982877FD1AB4A718",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-37BDAC4DD7452233",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-731659370AE881A8",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-02699B1B1C84DD97",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-074ED8D46B6779E7",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-0E0A0DD4EFDEE624",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-B08DF94BEC0514ED",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-893E45197A83180E",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-2BA41373571216AB",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-0A7EE277CC384093",
+                "type": "PROCESS_GROUP_INSTANCE"
+              },
+              {
+                "id": "PROCESS_GROUP_INSTANCE-93F8F340F81064E3",
+                "type": "PROCESS_GROUP_INSTANCE"
+              }
+            ],
+            "isDiskOf": [
+              {
+                "id": "DISK-4FFF43498B7A6738",
+                "type": "DISK"
+              }
+            ],
+            "runsOn": [
+              {
+                "id": "PROCESS_GROUP-43C210959BA0D3DA",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-EA3DC276904DD0C9",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-AB0163FF20FB0174",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-073EAAA3AA375CF9",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-3AD9FB79C914520C",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-EF1E81586EB8EDD6",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-ECE82357AF59AF52",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-FBFD2018B02CCE52",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-B27330900F0E858D",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-4FD89B9B4C58C364",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-55BB99EBACB51463",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-216FDBEF8325B5C6",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-5B2967AC18C6B209",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-5602EBC664E490F8",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-BEA6CD8766CD22D8",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-3D3A8CCC0535BF0D",
+                "type": "PROCESS_GROUP"
+              },
+              {
+                "id": "PROCESS_GROUP-F3B7E8513A1EA36E",
+                "type": "PROCESS_GROUP"
+              }
+            ],
+            "runsOnHost": [
+              {
+                "id": "SERVICE-FAFD61159553566D",
+                "type": "SERVICE"
+              },
+              {
+                "id": "SERVICE_INSTANCE-2202CAC15CB97C2B",
+                "type": "SERVICE_INSTANCE"
+              }
+            ],
+            "isNetworkInterfaceOf": [
+              {
+                "id": "NETWORK_INTERFACE-ECC31F94493E9A4A",
+                "type": "NETWORK_INTERFACE"
+              }
+            ],
+            "isSiteOf": [
+              {
+                "id": "AWS_AVAILABILITY_ZONE-41B70BF3061AE9F8",
+                "type": "AWS_AVAILABILITY_ZONE"
+              },
+              {
+                "id": "GEOLOC_SITE-95196F3C9A4F4215",
+                "type": "GEOLOC_SITE"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "NETWORK_INTERFACE",
+        "results": {
+          "entityId": "NETWORK_INTERFACE-ECC31F94493E9A4A",
+          "type": "NETWORK_INTERFACE",
+          "displayName": "eth0",
+          "firstSeenTms": 1679958719819,
+          "lastSeenTms": 1682618838267,
+          "properties": {
+            "detectedName": "eth0",
+            "macAddress": "12:0D:DB:AA:1C:01",
+            "ipAddress": ["10.4.6.233"]
+          },
+          "tags": [],
+          "icon": {
+            "primaryIconType": "network"
+          },
+          "fromRelationships": {
+            "isNetworkInterfaceOf": [
+              {
+                "id": "HOST-ECC30D999294864B",
+                "type": "HOST"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

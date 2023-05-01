@@ -78,56 +78,40 @@ module.exports = {
     rejectUnauthorized: true,
   },
   logging: {
-    level: "info", //trace, debug, info, warn, error, fatal
+    level: "trace", //trace, debug, info, warn, error, fatal
   },
-  copyOnDemand: true,
-  /**
-   * Options that are displayed to the user/admin in the Polarity integration user-interface.  Should be structured
-   * as an array of option objects.
-   *
-   * @type Array
-   * @optional
-   */
   options: [
+    // Authentication works by passing the public and private tokens in the header of the request along with a prefix
+    // Since the prefix will always be the one for the api token, we can just hard code it here to 'dt0c01
     {
-      key: "url",
-      name: "Dynatrace URL",
+      key: "envId",
+      name: "Environment ID",
       description:
-        "The base URL for the Dynatrace API including the scheme (i.e., https://) and port (e.g., https://mydynatrace:443)",
+        "The Dynatrace Environment ID to use for API requests. This can be found in the URL when logged into Dynatrace. For example, if the URL is https://abc123.live.dynatrace.com/#home, the environment ID is abc123.",
       type: "text",
       default: "",
       userCanEdit: true,
       adminOnly: false,
     },
     {
-      key: "apiToken",
-      name: "Dynatrace API Token",
+      key: "apiKey",
+      name: "Dynatrace apiKey",
       description:
-        'A Dynatrace API Token which can be created from the Dynatrace web interface by going to "Settings -> Integration -> Dynatrace API".',
+        'TODO A Dynatrace Public Token which can be created from the Dynatrace web interface by going to "Settings -> Integration -> Dynatrace API".',
       default: "",
-      type: "password",
+      type: "text",
       userCanEdit: true,
       adminOnly: false,
     },
     {
       key: "searchString",
-      name: "Dynatrace Search Query",
+      name: "DQL/ Log Search",
       description:
         "Dynatrace Search Query to execute. The string `{{ENTITY}}` will be replaced by the looked up indicator. For example: host.name:{{ENTITY}} or process_group_name:{{ENTITY}}. If left blank, the search query will default to host.name:{{ENTITY}}.",
       default: "host.name:{{ENTITY}}",
       type: "text",
       userCanEdit: true,
       adminOnly: false,
-    },
-    {
-      key: "timeframe",
-      name: "Dynatrace Search Timeframe",
-      description:
-        "Splunk Search String to execute. The string `{{ENTITY}}` will be replaced by the looked up indicator. For example: index=logs value=TERM({{ENTITY}}) | head 10.",
-      default: 'index=main "{{ENTITY}}" | head 10',
-      type: "text",
-      userCanEdit: false,
-      adminOnly: true,
     },
   ],
 };
