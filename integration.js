@@ -1,35 +1,37 @@
 'use strict';
 
-const request = require('postman-request');
-const config = require('./config/config');
-const async = require('async');
-const fs = require('fs');
 const { size, get, flow, reduce, keys, chunk, flatten, map } = require('lodash/fp');
 
-const requestWithDefaults = require('./src/requests/createRequestWithDefaults');
-const { setLogger } = require('./src/logger');
+const { setLogger, getLogger } = require('./src/logger');
+const { parseErrorToReadableJson } = require('./src/dataTransformations');
+const searchEntities = require('./src/searchEntities');
+const assembleLookupResults = require('./src/assembleLookupResults');
 
-let Logger;
+const doLookup = async (entities, options, cb) => {
+  const Logger = getLogger();
+  try {
+    Logger.debug({ entities }, 'Entities');
 
-const doLookup = (entities, options, cb) => {};
+    const { subsystems, logs } = await searchEntities(entities, options);
 
-function _getSummaryTags(results, summaryFields) {
-  const tags = new Map();
+    // Logger.trace({ subsystems, logs }, 'Search Results');
 
-  results.forEach((item) => {
-    summaryFields.forEach((field) => {
-      const summaryField = item.result[field];
-      if (summaryField) {
-        tags.set(`${field}${summaryField}`, {
-          field: field,
-          value: summaryField
-        });
-      }
-    });
-  });
+    const lookupResults = await assembleLookupResults(
+      entities,
+      subsystems,
+      logs,
+      options
+    );
 
-  return Array.from(tags.values());
-}
+    Logger.trace({ lookupResults }, 'Lookup Results');
+    cb(null, lookupResults);
+  } catch (error) {
+    const err = parseErrorToReadableJson(error);
+
+    Logger.error({ error, formattedError: err }, 'Get Lookup Results Failed');
+    cb({ detail: error.message || 'Lookup Failed', err });
+  }
+};
 
 const validateOptions = async (options, callback) => {
   const authOptionErrors = getAuthenticationOptionValidationErrors(options);
