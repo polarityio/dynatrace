@@ -1,0 +1,18 @@
+<ul class="nav nav-tabs">
+  {{#if (get details "logs" "length")}}
+    <li class="nav-item">
+      <a
+        class="nav-link {{if (eq activeTab "logs") "active"}}"
+        href="#"
+        {{action "changeTab" "logs"}}
+      >
+        {{get displayTabNames "logs"}}
+      </a>
+    </li>
+  {{/if}}
+</ul>
+
+{{#if (eq activeTab "logs")}}
+  <div class="logs">
+  </div>
+{{/if}}
