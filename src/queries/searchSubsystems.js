@@ -1,7 +1,6 @@
 const { get, flow, entries, map, flatten, uniqBy, groupBy } = require('lodash/fp');
 const { ENTITY_TYPE_BY_QUERY_PROPERTY } = require('../constants');
 const { requestsInParallel } = require('../requests');
-const { getLogger } = require('../logger');
 
 const searchSubsystemByEntityType = async (entity, options) => {
   const entityTypeQueryProperties = get(entity.type, ENTITY_TYPE_BY_QUERY_PROPERTY);
@@ -24,20 +23,6 @@ const searchSubsystemByEntityType = async (entity, options) => {
 
   const result = await requestsInParallel(searchRequests, 'body');
 
-  // [{entityId: 'host-123712387', type: 'hosts', displayName: 'This host'}]
-
-  /**{
-    hosts: [{
-      entityId: 'host-123712387', type: 'hosts', displayName: 'This host'
-    }],
-    aws_instance: [
-
-    ],
-    network_interface: [
-      
-    ]
-  }
-  */
   const resultEntity = flow(
     map(get('entities')),
     flatten,

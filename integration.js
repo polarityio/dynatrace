@@ -6,15 +6,15 @@ const { setLogger, getLogger } = require('./src/logger');
 const { parseErrorToReadableJson } = require('./src/dataTransformations');
 const searchEntities = require('./src/searchEntities');
 const assembleLookupResults = require('./src/assembleLookupResults');
+const { validateOptions } = require('./src/userOptions');
+const onMessageFunctions = require('./src/onMessage');
 
 const doLookup = async (entities, options, cb) => {
   const Logger = getLogger();
   try {
-    Logger.debug({ entities }, 'Entities');
-
     const { subsystems, logs } = await searchEntities(entities, options);
 
-    // Logger.trace({ subsystems, logs }, 'Search Results');
+    Logger.trace({ subsystems, logs }, 'Search Results');
 
     const lookupResults = await assembleLookupResults(
       entities,
@@ -33,21 +33,12 @@ const doLookup = async (entities, options, cb) => {
   }
 };
 
-const validateOptions = async (options, callback) => {
-  const authOptionErrors = getAuthenticationOptionValidationErrors(options);
-  if (size(authOptionErrors)) return callback(null, authOptionErrors);
-
-  const formattedOptions = reduce(
-    (agg, key) => ({ ...agg, [key]: get([key, 'value'], options) }),
-    {},
-    keys(options)
-  );
-
-  callback(null);
-};
+const onMessage = ({ action, data: actionParams }, options, callback) =>
+  onMessageFunctions[action](actionParams, options, callback);
 
 module.exports = {
   doLookup,
   startup: setLogger,
-  validateOptions
+  validateOptions,
+  onMessage
 };

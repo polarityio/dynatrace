@@ -8,10 +8,10 @@ const {
   includes,
   toLower,
   find,
-  filter
+  filter,
+  replace
 } = require('lodash/fp');
-const { requestWithDefaults, requestsInParallel } = require('../requests');
-const { parseErrorToReadableJson } = require('../dataTransformations');
+const { requestsInParallel } = require('../requests');
 const { MAX_AGGREGATE_QUERY_SIZE, LOG_SEARCH_LIMIT } = require('../constants');
 
 const searchLogs = async (entities, options) => {
@@ -24,7 +24,16 @@ const searchLogs = async (entities, options) => {
       route: 'logs/search',
       options,
       qs: {
-        search: flow(map(get('value')), join(' OR '))(entityValuesChunk),
+        search: flow(
+          map((entity) =>
+            replace(
+              /{{ENTITY}}/gi,
+              replace(/(\r\n|\n|\r)/gm, '', entity.value),
+              options.searchString
+            )
+          ),
+          join(' OR ')
+        )(entityValuesChunk),
         limit: LOG_SEARCH_LIMIT
       }
     }))
@@ -34,34 +43,6 @@ const searchLogs = async (entities, options) => {
     await requestsInParallel(logSearchRequests, 'body.results')
   );
 
-  // const logSearchResults = [
-  //   {
-  //     entity: ['polarity.io', 'polarity1.io'],
-  //     result: [
-  //       { foo: 'asdf asdf polarity.io', bar: 'fff' },
-  //       { foo: 'asdf asdf polarity1.io', bar: 'fdsa' },
-  //       { foo: 'asdf asdf polarity.io', bar: 111 }
-  //     ]
-  //   },
-  //   {
-  //     entity: ['polarity2.io', 'polarity3.io'],
-  //     result: [
-  //       { foo: 'asdf asdf polarity3.io', bar: 'fff' },
-  //       { foo: 'asdf asdf polarity2.io fdsa', bar: 'fdsa' },
-  //       { foo: 'asdf asdf polarity3.io', bar: 111 }
-  //     ]
-  //   },
-  //   {
-  //     entity: ['polarity4.io', 'polarity5.io'],
-  //     result: [
-  //       { foo: 'asdf asdf polarity5.io', bar: 'fff' },
-  //       { foo: 'asdf asdf polarity4.io', bar: 'fdsa' },
-  //       { foo: 'asdf asdf polarity4.io', bar: 111 }
-  //     ]
-  //   }
-  // ];
-
-  // TODO: Test with real data
   const associateEntityWithResults = flow(
     map((entity) => ({
       entity,

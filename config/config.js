@@ -24,7 +24,7 @@ module.exports = {
    */
   description:
     'Dynatrace is a software intelligence platform that provides monitoring and analytics for applications and infrastructure in real-time.',
-  entityTypes: ['ip', 'ipv4', 'ipv6'],
+  entityTypes: ['IPv4', 'IPv6', 'domain'],
   defaultColor: 'light-gray',
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
@@ -42,20 +42,13 @@ module.exports = {
    * @type Object
    * @optional
    */
+
   block: {
     component: {
       file: './components/dt-block.js'
     },
     template: {
       file: './templates/dt-block.hbs'
-    }
-  },
-  summary: {
-    component: {
-      file: './components/dt-summary.js'
-    },
-    template: {
-      file: './templates/dt-summary.hbs'
     }
   },
   request: {
@@ -78,7 +71,7 @@ module.exports = {
     rejectUnauthorized: true
   },
   logging: {
-    level: 'trace' //trace, debug, info, warn, error, fatal
+    level: 'info' //trace, debug, info, warn, error, fatal
   },
   options: [
     // Authentication works by passing the public and private tokens in the header of the request along with a prefix
@@ -97,7 +90,7 @@ module.exports = {
       key: 'apiKey',
       name: 'Dynatrace apiKey',
       description:
-        'TODO A Dynatrace Public Token which can be created from the Dynatrace web interface by going to "Settings -> Integration -> Dynatrace API".',
+        'A Dynatrace Public Token which can be created from the Dynatrace web interface by going to "Settings -> Integration -> Dynatrace API".',
       default: '',
       type: 'text',
       userCanEdit: true,
@@ -108,7 +101,7 @@ module.exports = {
       name: 'DQL/ Log Search',
       description:
         'Dynatrace Search Query to execute. The string `{{ENTITY}}` will be replaced by the looked up indicator. For example: host.name:{{ENTITY}} or process_group_name:{{ENTITY}}. If left blank, the search query will default to host.name:{{ENTITY}}.',
-      default: 'host.name:{{ENTITY}}',
+      default: '{{ENTITY}}',
       type: 'text',
       userCanEdit: true,
       adminOnly: false

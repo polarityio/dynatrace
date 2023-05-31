@@ -1,7 +1,8 @@
-const { get } = require('lodash');
+const { get, flow, map } = require('lodash/fp');
 const { getLogger } = require('../logger');
 const { requestWithDefaults } = require('../requests');
-const { parseErrorToReadableJson } = require('../utils');
+const { parseErrorToReadableJson } = require('../dataTransformations');
+const { TYPE_BASED_DISPLAY_SCHEMA } = require('../constants');
 
 const getSubsystemEntitiesBySearchResults = async ({ entityId }, options, callback) => {
   const Logger = getLogger();
@@ -12,25 +13,44 @@ const getSubsystemEntitiesBySearchResults = async ({ entityId }, options, callba
         method: 'GET',
         route: `entities/${entityId}`,
         options
-      }).catch(parseErrorToReadableJson)
+      })
     );
-    // throw new Error('Not work good. Request failed')
-    callback(null, entityContent);
+
+    const entityType = get('type', entityContent);
+    const displaySchemaForThisType = get(entityType, TYPE_BASED_DISPLAY_SCHEMA);
+
+    const subsystemEntityPropertyFields = flow(
+      map((displayField) => {
+        const displayFieldValue = get(
+          ['properties', get('path', displayField)],
+          entityContent
+        );
+        return {
+          name: get('name', displayField),
+          type: get('type', displayField),
+          value: displayField.preprocess
+            ? displayField.preprocess(displayFieldValue)
+            : displayFieldValue
+        };
+      })
+    )(displaySchemaForThisType);
+
+    callback(null, { subsystemEntityPropertyFields });
   } catch (error) {
     const err = parseErrorToReadableJson(error);
     Logger.error(
       {
-        detail: 'Failed API Quota Lookup',
+        detail: 'Failed API Lookup',
         options,
         formattedError: err
       },
-      'API Quota Lookup Failed'
+      'API Lookup Failed'
     );
     return callback({
       errors: [
         {
           err: error,
-          detail: error.message || 'API Quota Lookup Failed'
+          detail: error.message || 'API Lookup Failed'
         }
       ]
     });
