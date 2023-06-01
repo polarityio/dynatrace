@@ -1,5 +1,5 @@
 const { parallelLimit } = require('async');
-const { map, get, getOr, filter, flow, negate, isEmpty } = require('lodash/fp');
+const { map, get } = require('lodash/fp');
 
 const createRequestsInParallel =
   (requestWithDefaults) =>

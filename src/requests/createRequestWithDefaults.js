@@ -1,20 +1,18 @@
-const fs = require("fs");
+const fs = require('fs');
 
-const request = require("postman-request");
-const { get } = require("lodash/fp");
+const request = require('postman-request');
 
-const authenticateRequest = require("./authenticateRequest");
-const { getLogger } = require("../logger");
+const authenticateRequest = require('./authenticateRequest');
+const { getLogger } = require('../logger');
 
 const SUCCESSFUL_ROUNDED_REQUEST_STATUS_CODES = [200];
 
-const _configFieldIsValid = (field) =>
-  typeof field === "string" && field.length > 0;
+const _configFieldIsValid = (field) => typeof field === 'string' && field.length > 0;
 
 const createRequestWithDefaults = () => {
   const {
-    request: { ca, cert, key, passphrase, rejectUnauthorized, proxy },
-  } = require("../../config/config.js");
+    request: { ca, cert, key, passphrase, rejectUnauthorized, proxy }
+  } = require('../../config/config.js');
 
   const defaults = {
     ...(_configFieldIsValid(ca) && { ca: fs.readFileSync(ca) }),
@@ -22,8 +20,8 @@ const createRequestWithDefaults = () => {
     ...(_configFieldIsValid(key) && { key: fs.readFileSync(key) }),
     ...(_configFieldIsValid(passphrase) && { passphrase }),
     ...(_configFieldIsValid(proxy) && { proxy }),
-    ...(typeof rejectUnauthorized === "boolean" && { rejectUnauthorized }),
-    json: true,
+    ...(typeof rejectUnauthorized === 'boolean' && { rejectUnauthorized }),
+    json: true
   };
 
   const requestWithDefaultsBuilder = (
@@ -44,12 +42,10 @@ const createRequestWithDefaults = () => {
       });
 
     return async (requestOptions) => {
-      const preRequestFunctionResults = await preRequestFunction(
-        requestOptions
-      );
+      const preRequestFunctionResults = await preRequestFunction(requestOptions);
       const _requestOptions = {
         ...requestOptions,
-        ...preRequestFunctionResults,
+        ...preRequestFunctionResults
       };
 
       let postRequestFunctionResults;
@@ -76,19 +72,12 @@ const createRequestWithDefaults = () => {
 
     const requestOptionsWithoutSensitiveData = {
       ...requestOptions,
-      options: "{...}",
+      options: '{...}',
       headers: {
         ...requestOptions.headers,
-        "x-api-key": "***",
-      },
+        'x-api-key': '***'
+      }
     };
-
-    // Logger.trace({
-    //   MESSAGE: "Request Ran, Checking Status...",
-    //   statusCode,
-    //   requestOptions: requestOptionsWithoutSensitiveData,
-    //   responseBody: body,
-    // });
 
     const roundedStatus = Math.round(statusCode / 100) * 100;
     const statusCodeNotSuccessful =
@@ -98,15 +87,12 @@ const createRequestWithDefaults = () => {
       const requestError = Error(`Request Error`);
       requestError.status = statusCode;
       requestError.description = JSON.stringify(body);
-      requestError.requestOptions = JSON.stringify(
-        requestOptionsWithoutSensitiveData
-      );
+      requestError.requestOptions = JSON.stringify(requestOptionsWithoutSensitiveData);
       throw requestError;
     }
   };
 
-  const requestDefaultsWithInterceptors =
-    requestWithDefaultsBuilder(authenticateRequest);
+  const requestDefaultsWithInterceptors = requestWithDefaultsBuilder(authenticateRequest);
 
   return requestDefaultsWithInterceptors;
 };
