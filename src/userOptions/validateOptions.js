@@ -12,7 +12,8 @@ const validateOptions = async (options, callback) => {
     options
   );
 
-  const logSearchValidationErrors = !includes(/{{ENTITY}}/gi, options.searchString.value)
+  const entityString = '{{ENTITY}}';
+  const logSearchValidationErrors = !includes(entityString, options.searchString.value)
     ? { key: 'searchString', message: '* Missing {{ENTITY}}' }
     : [];
 
