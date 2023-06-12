@@ -1,7 +1,4 @@
 'use strict';
-
-const { size, get, flow, reduce, keys, chunk, flatten, map } = require('lodash/fp');
-
 const { setLogger, getLogger } = require('./src/logger');
 const { parseErrorToReadableJson } = require('./src/dataTransformations');
 const searchEntities = require('./src/searchEntities');
