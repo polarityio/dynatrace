@@ -25,18 +25,6 @@
   {{/each}}
 </ul>
 
-{{! TODO: Loop over the subsystems and create a conditional that only renders for that subsystem }}
-
-{{!-- 
-
-{{#if (eq activeTab "ipAddresses")}}
-  <div class="ipAddresses">
-    tab content
-  </div>
-{{/if}} 
-
---}}
-
 {{#each details.subsystemTypes as |subsystemType|}}
   {{#if (eq activeTab subsystemType)}}
     {{#with (get details.subsystems subsystemType) as |subsystemsForType|}}
@@ -78,7 +66,9 @@
                       {{subsystemEntityFields.name}}
                     </span>
                     <div class="log-content">
-                      <pre class="p-text">{{subsystemEntityFields.value}}</pre>
+                      <pre class="p-text">
+                        {{subsystemEntityFields.value}}
+                      </pre>
                     </div>
                   </div>
                 {{else}}
@@ -170,7 +160,9 @@
       </div>
 
       <div class="log-content">
-        <pre class="p-text">{{log.content}}</pre>
+        <pre class="p-text">
+          {{log.content}}
+        </pre>
       </div>
 
       <hr />
