@@ -136,6 +136,21 @@
 
 {{#if (eq activeTab "logs")}}
   <div class="logs">
+    <div class="log-link">
+      {{#with (get details "encodedLogQueryContent") as |logQueryContent|}}
+        <a
+          href="https://{{
+            block.userOptions.envId
+          }}.live.dynatrace.com/ui/log-monitoring#{{logQueryContent}}"
+        >
+          View In Dynatrace {{fa-icon
+            "external-link"
+            fixedWidth=true
+            class="external-icon"
+          }}
+        </a>
+      {{/with}}
+    </div>
     {{#each (get details "logs") as |log|}}
       <div class="log">
         <div class="timestamp">
@@ -158,13 +173,11 @@
           </span>
         </div>
       </div>
-
       <div class="log-content">
         <pre class="p-text">
           {{log.content}}
         </pre>
       </div>
-
       <hr />
     {{/each}}
   </div>

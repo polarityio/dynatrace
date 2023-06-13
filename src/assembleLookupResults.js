@@ -46,6 +46,10 @@ const getResultsForThisEntity = (entity, subsystems, logs, options) => {
 
   const logsForThisEntity = getResultForThisEntityResult(entity, logs);
 
+  const encodeBase64 = (str) => str && Buffer.from(str).toString('base64');
+
+  const encodedLogQueryContent = encodeBase64(`content='${entity.value}'`);
+
   const logsWithParsedContent = map((log) => {
     try {
       const content = JSON.stringify(JSON.parse(log.content), null, 2);
@@ -62,14 +66,16 @@ const getResultsForThisEntity = (entity, subsystems, logs, options) => {
       logs,
       subsystemsForThisEntity,
       logsForThisEntity,
-      logsWithParsedContent
+      logsWithParsedContent,
+      encodedLogQueryContent
     },
     'getResultsForThisEntity'
   );
   return {
     subsystems: subsystemsForThisEntity,
     logs: logsWithParsedContent,
-    subsystemTypes: flow(values, flatMap(keys), uniq)(ENTITY_TYPE_BY_QUERY_PROPERTY)
+    subsystemTypes: flow(values, flatMap(keys), uniq)(ENTITY_TYPE_BY_QUERY_PROPERTY),
+    encodedLogQueryContent
   };
 };
 
