@@ -74,8 +74,6 @@ const getResultsForThisEntity = (entity, subsystems, logs, options) => {
 };
 
 const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
-  //TODO: Do after UI
-  // TODO: Add subsystems as summary tags
   // Get number of subsystems for each subsystem type and create summary tags string
   const subsystemsTypesWithCount = flow(
     map((subsystemType) => ({
@@ -89,12 +87,10 @@ const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
     count: size(logs)
   };
 
-  // Create summary tags using the subsystems and logs
-  // If the number of subsystems is greater than 0, add the subsystems summary tag and a comma except for the last one
   const subsystemSummaryTags = flow(
     map((subsystemTypeWithCount) => {
       const { name, count } = subsystemTypeWithCount;
-      return count > 0 ? `${name} (${count})` : '';
+      return count > 0 ? `${name}: ${count}` : [];
     }),
     (subsystemTypesWithCount) =>
       subsystemTypesWithCount.filter(
@@ -104,7 +100,7 @@ const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
       subsystemTypesWithCount.length > 0 ? `${subsystemTypesWithCount.join(', ')}` : ''
   )(subsystemsTypesWithCount);
 
-  const logsSummaryTag = logsWithCount.count > 0 ? 'Logs Found' : '';
+  const logsSummaryTag = logsWithCount.count > 0 ? 'Logs Found' : [];
 
   return [].concat(logsSummaryTag).concat(subsystemSummaryTags);
 };
