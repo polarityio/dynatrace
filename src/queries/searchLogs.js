@@ -15,46 +15,27 @@ const { requestsInParallel } = require('../requests');
 const { MAX_AGGREGATE_QUERY_SIZE, LOG_SEARCH_LIMIT } = require('../constants');
 
 const searchLogs = async (entities, options) => {
-  const logSearchRequests = flow(
-    map(get('value')),
-    chunk(MAX_AGGREGATE_QUERY_SIZE),
-    map((entityValuesChunk) => ({
-      entity: entityValuesChunk,
+  const logSearchRequests = map(
+    (entity) => ({
+      entity,
       method: 'GET',
       route: 'logs/search',
       options,
       qs: {
-        search: flow(
-          map((entity) =>
-            replace(
-              /{{ENTITY}}/gi,
-              replace(/(\r\n|\n|\r)/gm, '', entity.value),
-              options.searchString
-            )
-          ),
-          join(' OR ')
-        )(entityValuesChunk),
+        search: replace(
+          /{{ENTITY}}/gi,
+          replace(/(\r\n|\n|\r)/gm, '', entity.value),
+          options.searchString
+        ),
         limit: LOG_SEARCH_LIMIT
       }
-    }))
-  )(entities);
-
-  const logSearchResults = flatten(
-    await requestsInParallel(logSearchRequests, 'body.results')
+    }),
+    entities
   );
 
-  const associateEntityWithResults = flow(
-    map((entity) => ({
-      entity,
-      result: flow(
-        find((result) => result.entity.includes(entity.value)),
-        get('result'),
-        filter(flow(JSON.stringify, toLower, includes(entity.value.toLowerCase())))
-      )(logSearchResults)
-    }))
-  )(entities);
+  const logSearchResults = await requestsInParallel(logSearchRequests, 'body.results');
 
-  return associateEntityWithResults;
+  return logSearchResults;
 };
 
 module.exports = searchLogs;
