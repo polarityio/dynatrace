@@ -2,7 +2,7 @@
   {{#if (get details "logs" "length")}}
     <li class="nav-item">
       <a
-        class="nav-link {{if (eq activeTab "logs") "active"}}"
+        class="nav-link {{if (eq activeTab 'logs') 'active'}}"
         href="#"
         {{action "changeTab" "logs"}}
       >
@@ -14,7 +14,7 @@
     {{#if (get details.subsystems subsystemType)}}
       <li class="nav-item">
         <a
-          class="nav-link {{if (eq activeTab subsystemType) "active"}}"
+          class="nav-link {{if (eq activeTab subsystemType) 'active'}}"
           href="#"
           {{action "changeTab" subsystemType}}
         >
@@ -42,22 +42,16 @@
             {{fa-icon "angle-up"}}
           </a>
           <a
-            href="https://{{block.userOptions.envId}}.live.dynatrace.com/ui/entity/{{
-              subsystem.entityId
-            }}"
+            href="https://{{block.userOptions.envId}}.live.dynatrace.com/ui/entity/{{subsystem.entityId}}"
           >
-            View In Dynatrace {{fa-icon
-              "external-link"
-              fixedWidth=true
-              class="external-icon"
-            }}
+            View In Dynatrace
+            {{fa-icon "external-link" fixedWidth=true class="external-icon"}}
           </a>
           {{#each subsystemsForType as |subsystem|}}
             <div class={{subsystemType}}>
               {{#each
-                (get
-                  searchedSubsystemEntities subsystem.entityId
-                ) as |subsystemEntityFields|
+                (get searchedSubsystemEntities subsystem.entityId)
+                as |subsystemEntityFields|
               }}
                 {{#if (eq subsystemEntityFields.type "pre")}}
                   <div class="p-pre">
@@ -115,15 +109,10 @@
             </span>{{fa-icon "angle-down"}}
           </a>
           <a
-            href="https://{{block.userOptions.envId}}.live.dynatrace.com/ui/entity/{{
-              subsystem.entityId
-            }}"
+            href="https://{{block.userOptions.envId}}.live.dynatrace.com/ui/entity/{{subsystem.entityId}}"
           >
-            View In Dynatrace {{fa-icon
-              "external-link"
-              fixedWidth=true
-              class="external-icon"
-            }}
+            View In Dynatrace
+            {{fa-icon "external-link" fixedWidth=true class="external-icon"}}
           </a>
         {{/if}}
       {{/each}}
@@ -134,19 +123,15 @@
 {{#if (eq activeTab "logs")}}
   <div class="logs">
     <div class="log-link">
-      {{#with (get details "encodedLogQueryContent") as |logQueryContent|}}
-        <a
-          href="https://{{
-            block.userOptions.envId
-          }}.live.dynatrace.com/ui/log-monitoring#{{logQueryContent}}"
-        >
-          View In Dynatrace {{fa-icon
-            "external-link"
-            fixedWidth=true
-            class="external-icon"
-          }}
-        </a>
-      {{/with}}
+      <a
+        href="https://{{block.userOptions.envId}}.live.dynatrace.com/ui/log-monitoring?query=%22{{block.entity.value}}%22&gtf=-{{or
+          details.greatestTimeBackInFoundLogs
+          10
+        }}d"
+      >
+        View In Dynatrace
+        {{fa-icon "external-link" fixedWidth=true class="external-icon"}}
+      </a>
     </div>
     {{#each (get details "logs") as |log|}}
       <div class="log">

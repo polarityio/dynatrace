@@ -75,7 +75,6 @@ module.exports = {
   },
   options: [
     // Authentication works by passing the public and private tokens in the header of the request along with a prefix
-    // Since the prefix will always be the one for the api token, we can just hard code it here to 'dt0c01
     {
       key: 'envId',
       name: 'Environment ID',

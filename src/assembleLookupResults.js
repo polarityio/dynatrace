@@ -11,10 +11,14 @@ const {
   keys,
   uniq,
   join,
-  compact
+  compact,
+  max
 } = require('lodash/fp');
+const { DateTime, Interval } = require('luxon');
+
 const { ENTITY_TYPE_BY_QUERY_PROPERTY } = require('./constants');
 const { getLogger } = require('./logger');
+
 const assembleLookupResults = (entities, subsystems, logs, options) =>
   map((entity) => {
     const resultsForThisEntity = getResultsForThisEntity(
@@ -47,9 +51,18 @@ const getResultsForThisEntity = (entity, subsystems, logs, options) => {
 
   const logsForThisEntity = getResultForThisEntityResult(entity, logs);
 
-  const encodeBase64 = (str) => str && Buffer.from(str).toString('base64');
-
-  const encodedLogQueryContent = encodeBase64(`content='${entity.value}'`);
+  const greatestTimeBackInFoundLogs = encodeURIComponent(
+    flow(
+      map(({ timestamp }) =>
+        Math.ceil(
+          Interval.fromDateTimes(DateTime.fromMillis(timestamp), DateTime.now()).length(
+            'days'
+          )
+        )
+      ),
+      max
+    )(logsForThisEntity)
+  );
 
   const logsWithParsedContent = map((log) => {
     try {
@@ -68,7 +81,7 @@ const getResultsForThisEntity = (entity, subsystems, logs, options) => {
       subsystemsForThisEntity,
       logsForThisEntity,
       logsWithParsedContent,
-      encodedLogQueryContent
+      greatestTimeBackInFoundLogs
     },
     'getResultsForThisEntity'
   );
@@ -78,8 +91,8 @@ const getResultsForThisEntity = (entity, subsystems, logs, options) => {
     subsystemTypes: some(size, subsystemsForThisEntity)
       ? flow(values, flatMap(keys), uniq)(ENTITY_TYPE_BY_QUERY_PROPERTY)
       : [],
-    encodedLogQueryContent: some(size, logsWithParsedContent)
-      ? encodedLogQueryContent
+    greatestTimeBackInFoundLogs: some(size, logsWithParsedContent)
+      ? greatestTimeBackInFoundLogs
       : ''
   };
 };
@@ -104,29 +117,6 @@ const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
 
   return [].concat(logsSummaryTag || []).concat(subsystemSummaryTags || []);
 };
-
-// const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
-//   // Get number of subsystems for each subsystem type and create summary tags string
-//   return flow(
-//     map((subsystemType) => {
-//       const { name, count } = {
-//         name: subsystemType,
-//         count: size(subsystems[subsystemType])
-//       };
-//       return count > 0 ? `${name}: ${count}` : [];
-//     }),
-//     compact,
-//     (subsystemSummaryTags) => {
-//       const logsWithCount = {
-//         name: 'Logs',
-//         count: size(logs)
-//       };
-//       const logsSummaryTag = logsWithCount.count > 0 ? 'Logs Found' : [];
-//       return [].concat(logsSummaryTag).concat(subsystemSummaryTags);
-//     },
-//     join(', ')
-//   )(subsystemTypes);
-// };
 
 const getResultForThisEntityResult = (entity, results) => {
   const resultsForThisEntity = find(

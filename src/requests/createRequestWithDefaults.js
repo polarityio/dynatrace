@@ -105,7 +105,8 @@ const createRequestWithDefaults = () => {
           { requestOptions },
           'Request rate limit reached.  Retrying after 10 seconds.'
         );
-
+        // According to the docs, when hitting the rate limit, 
+        // the server will wait 10 seconds before responding before resetting
         await sleep(10000);
         return requestDefaultsWithInterceptors({
           ...requestOptions,

@@ -1,18 +1,7 @@
-const {
-  get,
-  flow,
-  chunk,
-  map,
-  flatten,
-  join,
-  includes,
-  toLower,
-  find,
-  filter,
-  replace
-} = require('lodash/fp');
+const { map, replace } = require('lodash/fp');
 const { requestsInParallel } = require('../requests');
-const { MAX_AGGREGATE_QUERY_SIZE, LOG_SEARCH_LIMIT } = require('../constants');
+const { LOG_SEARCH_LIMIT } = require('../constants');
+const { getLogger } = require('../logger');
 
 const searchLogs = async (entities, options) => {
   const logSearchRequests = map(
@@ -22,7 +11,7 @@ const searchLogs = async (entities, options) => {
       route: 'logs/search',
       options,
       qs: {
-        search: replace(
+        query: replace(
           /{{ENTITY}}/gi,
           replace(/(\r\n|\n|\r)/gm, '', entity.value),
           options.searchString
