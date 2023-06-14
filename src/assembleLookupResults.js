@@ -71,11 +71,16 @@ const getResultsForThisEntity = (entity, subsystems, logs, options) => {
     },
     'getResultsForThisEntity'
   );
+  // Change this so that it returns empty array if no results found
   return {
     subsystems: subsystemsForThisEntity,
     logs: logsWithParsedContent,
-    subsystemTypes: flow(values, flatMap(keys), uniq)(ENTITY_TYPE_BY_QUERY_PROPERTY),
-    encodedLogQueryContent
+    subsystemTypes: some(size, subsystemsForThisEntity)
+      ? flow(values, flatMap(keys), uniq)(ENTITY_TYPE_BY_QUERY_PROPERTY)
+      : [],
+    encodedLogQueryContent: some(size, logsWithParsedContent)
+      ? encodedLogQueryContent
+      : ''
   };
 };
 
@@ -103,7 +108,7 @@ const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
         (subsystemTypeWithCount) => subsystemTypeWithCount.length > 0
       ),
     (subsystemTypesWithCount) =>
-      subsystemTypesWithCount.length > 0 ? `${subsystemTypesWithCount.join(', ')}` : ''
+      subsystemTypesWithCount.length > 0 ? `${subsystemTypesWithCount.join(', ')}` : []
   )(subsystemsTypesWithCount);
 
   const logsSummaryTag = logsWithCount.count > 0 ? 'Logs Found' : [];
