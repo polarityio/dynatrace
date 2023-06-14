@@ -1,4 +1,3 @@
-const { sum } = require('lodash');
 const {
   get,
   size,
@@ -10,7 +9,8 @@ const {
   flatMap,
   groupBy,
   keys,
-  uniq
+  uniq,
+  join
 } = require('lodash/fp');
 const { ENTITY_TYPE_BY_QUERY_PROPERTY } = require('./constants');
 const { getLogger } = require('./logger');
@@ -108,7 +108,7 @@ const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
         (subsystemTypeWithCount) => subsystemTypeWithCount.length > 0
       ),
     (subsystemTypesWithCount) =>
-      subsystemTypesWithCount.length > 0 ? `${subsystemTypesWithCount.join(', ')}` : []
+      subsystemTypesWithCount.length > 0 ? `${join(', ', subsystemTypesWithCount)}` : []
   )(subsystemsTypesWithCount);
 
   const logsSummaryTag = logsWithCount.count > 0 ? 'Logs Found' : [];
