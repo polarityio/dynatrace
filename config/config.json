@@ -1,4 +1,5 @@
 {
+  "polarityIntegrationUuid": "3f98dd90-0ae7-11ee-9024-63f4ecac04ab",
   "name": "Dynatrace",
   "acronym": "DTRA",
   "description": "Dynatrace is a software intelligence platform that provides monitoring and analytics for applications and infrastructure in real-time.",
@@ -17,7 +18,7 @@
     "proxy": "",
     "rejectUnauthorized": true
   },
-  "logging": { "level": "trace" },
+  "logging": { "level": "info" },
   "options": [
     {
       "key": "envId",
