@@ -1,0 +1,50 @@
+{
+  "name": "Dynatrace",
+  "acronym": "DTRA",
+  "description": "Dynatrace is a software intelligence platform that provides monitoring and analytics for applications and infrastructure in real-time.",
+  "entityTypes": ["IPv4", "IPv6", "domain"],
+  "defaultColor": "light-gray",
+  "styles": ["./styles/dt.less"],
+  "block": {
+    "component": { "file": "./components/dt-block.js" },
+    "template": { "file": "./templates/dt-block.hbs" }
+  },
+  "request": {
+    "cert": "",
+    "key": "",
+    "passphrase": "",
+    "ca": "",
+    "proxy": "",
+    "rejectUnauthorized": true
+  },
+  "logging": { "level": "trace" },
+  "options": [
+    {
+      "key": "envId",
+      "name": "Environment ID",
+      "description": "The Dynatrace Environment ID to use for API requests. This can be found in the URL when logged into Dynatrace. For example, if the URL is https://abc123.live.dynatrace.com/#home, the environment ID is abc123.",
+      "type": "text",
+      "default": "",
+      "userCanEdit": true,
+      "adminOnly": false
+    },
+    {
+      "key": "apiKey",
+      "name": "Dynatrace apiKey",
+      "description": "A Dynatrace Public Token which can be created from the Dynatrace web interface by going to \"Settings -> Integration -> Dynatrace API\".",
+      "default": "",
+      "type": "password",
+      "userCanEdit": true,
+      "adminOnly": false
+    },
+    {
+      "key": "searchString",
+      "name": "DQL/ Log Search",
+      "description": "Dynatrace Search Query to execute. The string `{{ENTITY}}` will be replaced by the looked up indicator. For example: host.name:{{ENTITY}} or process_group_name:{{ENTITY}}. If left blank, the search query will default to host.name:{{ENTITY}}.",
+      "default": "{{ENTITY}}",
+      "type": "text",
+      "userCanEdit": true,
+      "adminOnly": false
+    }
+  ]
+}
