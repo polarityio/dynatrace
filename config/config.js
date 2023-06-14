@@ -92,7 +92,7 @@ module.exports = {
       description:
         'A Dynatrace Public Token which can be created from the Dynatrace web interface by going to "Settings -> Integration -> Dynatrace API".',
       default: '',
-      type: 'text',
+      type: 'password',
       userCanEdit: true,
       adminOnly: false
     },
