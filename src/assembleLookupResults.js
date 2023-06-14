@@ -10,7 +10,8 @@ const {
   groupBy,
   keys,
   uniq,
-  join
+  join,
+  compact
 } = require('lodash/fp');
 const { ENTITY_TYPE_BY_QUERY_PROPERTY } = require('./constants');
 const { getLogger } = require('./logger');
@@ -71,7 +72,6 @@ const getResultsForThisEntity = (entity, subsystems, logs, options) => {
     },
     'getResultsForThisEntity'
   );
-  // Change this so that it returns empty array if no results found
   return {
     subsystems: subsystemsForThisEntity,
     logs: logsWithParsedContent,
@@ -85,12 +85,14 @@ const getResultsForThisEntity = (entity, subsystems, logs, options) => {
 };
 
 const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
-  // Get number of subsystems for each subsystem type and create summary tags string
-  const subsystemsTypesWithCount = flow(
-    map((subsystemType) => ({
-      name: subsystemType,
-      count: size(subsystems[subsystemType])
-    }))
+  const subsystemSummaryTags = flow(
+    map((subsystemType) => {
+      const count = size(subsystems[subsystemType]);
+
+      return count > 0 && `${subsystemType}: ${count}`;
+    }),
+    compact,
+    join(', ')
   )(subsystemTypes);
 
   const logsWithCount = {
@@ -98,23 +100,33 @@ const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
     count: size(logs)
   };
 
-  const subsystemSummaryTags = flow(
-    map((subsystemTypeWithCount) => {
-      const { name, count } = subsystemTypeWithCount;
-      return count > 0 ? `${name}: ${count}` : [];
-    }),
-    (subsystemTypesWithCount) =>
-      subsystemTypesWithCount.filter(
-        (subsystemTypeWithCount) => subsystemTypeWithCount.length > 0
-      ),
-    (subsystemTypesWithCount) =>
-      subsystemTypesWithCount.length > 0 ? `${join(', ', subsystemTypesWithCount)}` : []
-  )(subsystemsTypesWithCount);
-
   const logsSummaryTag = logsWithCount.count > 0 ? 'Logs Found' : [];
 
-  return [].concat(logsSummaryTag).concat(subsystemSummaryTags);
+  return [].concat(logsSummaryTag || []).concat(subsystemSummaryTags || []);
 };
+
+// const createSummaryTags = ({ subsystems, logs, subsystemTypes }, options) => {
+//   // Get number of subsystems for each subsystem type and create summary tags string
+//   return flow(
+//     map((subsystemType) => {
+//       const { name, count } = {
+//         name: subsystemType,
+//         count: size(subsystems[subsystemType])
+//       };
+//       return count > 0 ? `${name}: ${count}` : [];
+//     }),
+//     compact,
+//     (subsystemSummaryTags) => {
+//       const logsWithCount = {
+//         name: 'Logs',
+//         count: size(logs)
+//       };
+//       const logsSummaryTag = logsWithCount.count > 0 ? 'Logs Found' : [];
+//       return [].concat(logsSummaryTag).concat(subsystemSummaryTags);
+//     },
+//     join(', ')
+//   )(subsystemTypes);
+// };
 
 const getResultForThisEntityResult = (entity, results) => {
   const resultsForThisEntity = find(
