@@ -4,6 +4,8 @@ const request = require('postman-request');
 
 const authenticateRequest = require('./authenticateRequest');
 const { getLogger } = require('../logger');
+const { identity } = require('lodash/fp');
+const { sleep } = require('../dataTransformations');
 
 const SUCCESSFUL_ROUNDED_REQUEST_STATUS_CODES = [200];
 
@@ -75,7 +77,7 @@ const createRequestWithDefaults = () => {
       options: '{...}',
       headers: {
         ...requestOptions.headers,
-        'x-api-key': '***'
+        Authorization: 'Api-Token ***'
       }
     };
 
@@ -92,7 +94,28 @@ const createRequestWithDefaults = () => {
     }
   };
 
-  const requestDefaultsWithInterceptors = requestWithDefaultsBuilder(authenticateRequest);
+  const requestDefaultsWithInterceptors = requestWithDefaultsBuilder(
+    authenticateRequest,
+    identity,
+    async (err, requestOptions) => {
+      if (err == 429 && requestOptions.remainingRetries > 0) {
+        const Logger = getLogger();
+
+        Logger.trace(
+          { requestOptions },
+          'Request rate limit reached.  Retrying after 10 seconds.'
+        );
+
+        await sleep(10000);
+        return requestDefaultsWithInterceptors({
+          ...requestOptions,
+          remainingRetries: requestOptions.remainingRetries - 1
+        });
+      }
+
+      throw err;
+    }
+  );
 
   return requestDefaultsWithInterceptors;
 };
