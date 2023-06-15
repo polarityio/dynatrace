@@ -2,12 +2,16 @@
 
 ## Dynatrace Integration Options
 
-| ![](images/example-1.png) | ![](images/example-2.png) |
-| ------------------------- | ------------------------- |
-| _Dynatrace Logs Tab_      | _Dynatrace Host Tab_      |
-| ![](images/example-3.png) | ![](images/example-4.png) |
-| ------------------------- | ------------------------- |
-| _Dynatrace EC2 Tab_      | _Dynatrace Network Tab_      |
+| ![](images/example-1.png) | 
+|---|
+| _Dynatrace Logs Tab_ | 
+| ![](images/example-2.png) |
+| _Dynatrace Host Tab_ |
+| ![](images/example-3.png) |
+| _Dynatrace EC2 Tab_ |
+| ![](images/example-4.png) |
+| _Dynatrace Network Tab_ |
+
 
 ### Dynatrace Environment ID
 

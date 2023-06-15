@@ -1,0 +1,164 @@
+<ul class="nav nav-tabs">
+  {{#if (get details "logs" "length")}}
+    <li class="nav-item">
+      <a
+        class="nav-link {{if (eq activeTab 'logs') 'active'}}"
+        href="#"
+        {{action "changeTab" "logs"}}
+      >
+        {{get displayTabNames "logs"}}
+      </a>
+    </li>
+  {{/if}}
+  {{#each details.subsystemTypes as |subsystemType|}}
+    {{#if (get details.subsystems subsystemType)}}
+      <li class="nav-item">
+        <a
+          class="nav-link {{if (eq activeTab subsystemType) 'active'}}"
+          href="#"
+          {{action "changeTab" subsystemType}}
+        >
+          {{get displayTabNames subsystemType}}
+        </a>
+      </li>
+    {{/if}}
+  {{/each}}
+</ul>
+
+{{#each details.subsystemTypes as |subsystemType|}}
+  {{#if (eq activeTab subsystemType)}}
+    {{#with (get details.subsystems subsystemType) as |subsystemsForType|}}
+      {{#each subsystemsForType as |subsystem|}}
+        {{#if (get expandableTitleStates subsystem.entityId)}}
+          <a
+            href="#"
+            class="expandable-title"
+            {{on "click" (action "toggleExpandableTitle" subsystem.entityId)}}
+          >
+            <span class="text">
+              {{fa-icon "laptop" fixedWidth=true}}
+              {{subsystem.displayName}}
+            </span>
+            {{fa-icon "angle-up"}}
+          </a>
+          <a
+            href="https://{{block.userOptions.envId}}.live.dynatrace.com/ui/entity/{{subsystem.entityId}}"
+          >
+            View In Dynatrace
+            {{fa-icon "external-link" fixedWidth=true class="external-icon"}}
+          </a>
+          {{#each subsystemsForType as |subsystem|}}
+            <div class={{subsystemType}}>
+              {{#each
+                (get searchedSubsystemEntities subsystem.entityId)
+                as |subsystemEntityFields|
+              }}
+                {{#if (eq subsystemEntityFields.type "pre")}}
+                  <div class="p-pre">
+                    <span class="p-key">
+                      {{subsystemEntityFields.name}}
+                    </span>
+                    <div class="log-content">
+                      <pre class="p-text">{{subsystemEntityFields.value}}</pre>
+                    </div>
+                  </div>
+                {{else}}
+                  {{#if (eq subsystemEntityFields.type "separator")}}
+                    <div class="p-separator">
+                      <hr />
+                    </div>
+                  {{else}}
+                    {{#if (eq subsystemEntityFields.type "boolean")}}
+                      <div class="p-boolean">
+                        <span class="p-key">
+                          {{subsystemEntityFields.name}}:
+                        </span>
+                        <span class="p-value {{subsystemEntityFields.value}}">
+                          {{subsystemEntityFields.value}}
+                          {{#if subsystemEntityFields.value}}
+                            {{fa-icon "check"}}
+                          {{else}}
+                            {{fa-icon "times"}}
+                          {{/if}}
+                        </span>
+                      </div>
+                    {{else}}
+                      <div class="p-prop">
+                        <span class="p-key">
+                          {{subsystemEntityFields.name}}:
+                        </span>
+                        <span class="p-value">
+                          {{subsystemEntityFields.value}}
+                        </span>
+                      </div>
+                    {{/if}}
+                  {{/if}}
+                {{/if}}
+              {{/each}}
+            </div>
+          {{/each}}
+        {{else}}
+          <a
+            href="#"
+            class="expandable-title"
+            {{on "click" (action "toggleExpandableTitle" subsystem.entityId)}}
+          >
+            <span class="text">
+              {{fa-icon "laptop" fixedWidth=true}}
+              {{subsystem.displayName}}
+            </span>{{fa-icon "angle-down"}}
+          </a>
+          <a
+            href="https://{{block.userOptions.envId}}.live.dynatrace.com/ui/entity/{{subsystem.entityId}}"
+          >
+            View In Dynatrace
+            {{fa-icon "external-link" fixedWidth=true class="external-icon"}}
+          </a>
+        {{/if}}
+      {{/each}}
+    {{/with}}
+  {{/if}}
+{{/each}}
+
+{{#if (eq activeTab "logs")}}
+  <div class="logs">
+    <div class="log-link">
+      <a
+        href="https://{{block.userOptions.envId}}.live.dynatrace.com/ui/log-monitoring?query=%22{{block.entity.value}}%22&gtf=-{{or
+          details.greatestTimeBackInFoundLogs
+          10
+        }}d"
+      >
+        View In Dynatrace
+        {{fa-icon "external-link" fixedWidth=true class="external-icon"}}
+      </a>
+    </div>
+    {{#each (get details "logs") as |log|}}
+      <div class="log">
+        <div class="timestamp">
+          <span class="p-key">
+            Timestamp:
+          </span>
+          <span class="p-value">
+            {{moment-format log.timestamp "YYYY-MM-DD HH:mm:ss z" timeZone=timezone}}
+          </span>
+          <span class="p-key">
+            ({{log.timestamp}})
+          </span>
+        </div>
+        <div>
+          <span class="p-key">
+            Status:
+          </span>
+          <span class="p-value log-status {{log.status}}">
+            {{log.status}}
+          </span>
+        </div>
+      </div>
+      <div class="log-content">
+        <pre class="p-text">{{log.content}}</pre>
+      </div>
+      <hr />
+    {{/each}}
+  </div>
+{{/if}}
