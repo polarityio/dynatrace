@@ -12,6 +12,7 @@
 | ![](images/example-4.png) |
 | _Dynatrace Network Tab_ |
 
+
 ### Dynatrace Environment ID
 
 This can be found in the URL when logged into Dynatrace. For example, if the URL is https://abc123.live.dynatrace.com/#home, the environment ID is abc123.
