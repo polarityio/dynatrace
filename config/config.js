@@ -100,7 +100,7 @@ module.exports = {
       name: 'DQL/ Log Search',
       description:
         'Dynatrace Search Query to execute. The string `{{ENTITY}}` will be replaced by the looked up indicator. For example: host.name:{{ENTITY}} or process_group_name:{{ENTITY}}. If left blank, the search query will default to host.name:{{ENTITY}}.',
-      default: '{{ENTITY}}',
+      default: 'host.name:{{ENTITY}}',
       type: 'text',
       userCanEdit: true,
       adminOnly: false
