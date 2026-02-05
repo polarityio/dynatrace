@@ -3,12 +3,22 @@
   "name": "Dynatrace",
   "acronym": "DTRA",
   "description": "Dynatrace is a software intelligence platform that provides monitoring and analytics for applications and infrastructure in real-time.",
-  "entityTypes": ["IPv4", "IPv6", "domain"],
+  "entityTypes": [
+    "IPv4",
+    "IPv6",
+    "domain"
+  ],
   "defaultColor": "light-gray",
-  "styles": ["./styles/dt.less"],
+  "styles": [
+    "./styles/dt.less"
+  ],
   "block": {
-    "component": { "file": "./components/dt-block.js" },
-    "template": { "file": "./templates/dt-block.hbs" }
+    "component": {
+      "file": "./components/dt-block.js"
+    },
+    "template": {
+      "file": "./templates/dt-block.hbs"
+    }
   },
   "request": {
     "cert": "",
@@ -17,7 +27,9 @@
     "ca": "",
     "proxy": ""
   },
-  "logging": { "level": "info" },
+  "logging": {
+    "level": "info"
+  },
   "options": [
     {
       "key": "envId",
@@ -46,5 +58,10 @@
       "userCanEdit": true,
       "adminOnly": false
     }
-  ]
+  ],
+  "reducer": {
+    "details": {
+      "file": "./reducers/details.json"
+    }
+  }
 }

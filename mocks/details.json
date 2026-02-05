@@ -1,0 +1,58 @@
+{
+  "logs": [
+    {
+      "timestamp": 1705438800000,
+      "status": "ERROR",
+      "content": "{\"message\": \"Connection timeout to database server\", \"host\": \"db-prod-01\", \"port\": 5432, \"retries\": 3}"
+    },
+    {
+      "timestamp": 1705438740000,
+      "status": "WARN",
+      "content": "{\"message\": \"High memory usage detected\", \"percentage\": 87, \"threshold\": 80, \"process\": \"java\"}"
+    },
+    {
+      "timestamp": 1705438680000,
+      "status": "INFO",
+      "content": "{\"message\": \"Application started successfully\", \"version\": \"2.4.1\", \"environment\": \"production\"}"
+    },
+    {
+      "timestamp": 1705438620000,
+      "status": "ERROR",
+      "content": "Failed to execute query: SELECT * FROM users WHERE id = 1234"
+    },
+    {
+      "timestamp": 1705438560000,
+      "status": "DEBUG",
+      "content": "{\"message\": \"Cache hit\", \"key\": \"user:session:abc123\", \"ttl\": 3600}"
+    }
+  ],
+  "subsystems": {
+    "HOST": [
+      {
+        "entityId": "HOST-1234567890ABCDEF",
+        "displayName": "prod-web-01.example.com",
+        "entityName": "prod-web-01",
+        "ipAddress": ["10.0.1.50", "172.16.0.10"],
+        "macAddresses": ["00:1B:44:11:3A:B7"],
+        "osType": "LINUX",
+        "osVersion": "Ubuntu 20.04.3 LTS",
+        "cpuCores": 8,
+        "memoryTotal": 16777216000,
+        "state": "RUNNING"
+      }
+    ],
+    "EC2_INSTANCE": [
+      {
+        "entityId": "EC2_INSTANCE-FEDCBA0987654321",
+        "displayName": "i-0a1b2c3d4e5f6g7h8",
+        "awsInstanceId": "i-0a1b2c3d4e5f6g7h8",
+        "awsInstanceType": "t3.large",
+        "localIp": "10.0.1.50",
+        "localHostName": "ip-10-0-1-50.ec2.internal",
+        "amiId": "ami-0c55b159cbfafe1f0"
+      }
+    ]
+  },
+  "subsystemTypes": ["HOST", "EC2_INSTANCE"],
+  "greatestTimeBackInFoundLogs": "2"
+}
